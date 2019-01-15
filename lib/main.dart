@@ -8,11 +8,17 @@ import 'package:http/http.dart' as http;
 class Beer {
   final int id;
   final String name;
+  final String imageUrl;
+  final String description;
 
-  Beer({this.id, this.name});
+  Beer({this.id, this.name, this.imageUrl, this.description});
 
   factory Beer.fromJson(Map<String, dynamic> json) {
-    return Beer(id: json['id'], name: json['name']);
+    return Beer(
+        id: json['id'],
+        name: json['name'],
+        imageUrl: json['image_url'],
+        description: json['description']);
   }
 }
 
@@ -83,7 +89,14 @@ class BeerFuture extends StatelessWidget {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
+                    leading: new Image.network(snapshot.data[index].imageUrl,
+                        height: 50),
                     title: Text('${snapshot.data[index].name}'),
+                    subtitle: Text(
+                      '${snapshot.data[index].description}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   );
                 });
           } else if (snapshot.hasError) {
